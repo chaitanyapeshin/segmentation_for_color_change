@@ -1,6 +1,6 @@
 # Carvana Image Masking Challenge
 
-![Carvana Challenge](https://www.carvana.com/images/carvana-logo.png)
+<img src="https://storage.googleapis.com/kaggle-organizations/833/thumbnail.png%3Fr=873" alt="drawing" width="200"/>
 
 Welcome to the Carvana Image Masking Challenge repository. This project focuses on semantic segmentation for cars as part of the Carvana Image Masking Challenge on Kaggle. The goal is to generate precise masks for cars in images.
 
@@ -23,11 +23,23 @@ Welcome to the Carvana Image Masking Challenge repository. This project focuses 
 
 The Carvana Image Masking Challenge aims to generate highly precise masks for cars in images. Semantic segmentation is used to precisely identify the boundaries of cars, contributing to various computer vision applications, including autonomous driving, object detection, and more.
 
+<p align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*GHRkj8iYO70Ws_wyfa9rhA.png" alt="Input Image">
+  <br>
+  <em>Input Image</em>
+</p>
+
+<p align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*9Z_p2cEuu7uZaNmYtza8JA.png" alt="Output Image">
+  <br>
+  <em>Output Image</em>
+</p>
+
 ## Evaluation
 
 The evaluation metric used for this competition is the Dice coefficient, defined as follows:
 
-![Dice coefficient formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/0c442abb87c6d649f9c4a1e17c52de4f6418f7cd)
+![Dice coefficient formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/a80a97215e1afc0b222e604af1b2099dc9363d3b)
 
 A higher Dice coefficient indicates better segmentation accuracy. A perfect overlap between the predicted set of pixels (X) and the ground truth (Y) results in a Dice coefficient of 1. Our aim is to maximize this metric by improving the overlap between X and Y.
 
@@ -39,6 +51,12 @@ I developed a custom architecture for this task, building upon the SegNet archit
 - 2 center convolutional layers
 - 7 decoder layers
 - 1 final convolutional classification layer
+
+<p align="center">
+  <img src="https://production-media.paperswithcode.com/methods/segnet_Vorazx7.png" alt="Model Architecture">
+  <br>
+  <em>Model Architecture (the final layer in this case is 'sigmoid' instead of 'softmax')</em>
+</p>
 
 Hardware limitations (NVIDIA RTX 3060 with 6GB VRAM) influenced my architecture choice. Key components include:
 
@@ -105,7 +123,7 @@ You can find all the references in the [references](./references/) directory.
 
 ## Getting Started
 
-To get started with the project, run the [model.ipynb](model.ipynb) notebook for training the model.
+To get started with the project, run the [model.ipynb](./notebooks/model.ipynb) notebook for training the model.
 
 ## License
 
