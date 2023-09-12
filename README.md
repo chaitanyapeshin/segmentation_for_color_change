@@ -102,24 +102,24 @@ You can find all the references in the [references](./references/) directory.
 
 ## Folder Structure
 .
-├── 29bb3ece3180_11.jpg
-├── assets
-│   └── tensorboard
-├── data
-│   ├── processed
-│   └── raw
-├── LICENSE
-├── notebooks
-│   └── model.ipynb
-├── README.md
-├── references
-│   ├── 1411.4038.pdf
-│   ├── 1505.04366.pdf
-│   └── 1511.00561.pdf
-├── requirements.txt
-├── sample_submission.csv
-└── src
-    └── data
+├── 29bb3ece3180_11.jpg  
+├── assets  
+│   └── tensorboard  
+├── data  
+│   ├── processed  
+│   └── raw  
+├── LICENSE  
+├── notebooks  
+│   └── model.ipynb  
+├── README.md  
+├── references  
+│   ├── 1411.4038.pdf  
+│   ├── 1505.04366.pdf  
+│   └── 1511.00561.pdf  
+├── requirements.txt  
+├── sample_submission.csv  
+└── src  
+    └── data  
 
 ## Getting Started
 
