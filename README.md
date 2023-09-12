@@ -39,7 +39,7 @@ The Carvana Image Masking Challenge aims to generate highly precise masks for ca
 
 The evaluation metric used for this competition is the Dice coefficient, defined as follows:
 
-<img src="https://www.researchgate.net/publication/368222578/figure/fig3/AS:11431281164621123@1685838022687/Dice-Sorensen-coefficient-formula.jpg" alt="drawing" width="250"/>
+<img src="https://miro.medium.com/v2/resize:fit:544/1*5eHgttXxEMukIJdqr2_ZNw.png" alt="drawing" width="250"/>
 
 A higher Dice coefficient indicates better segmentation accuracy. A perfect overlap between the predicted set of pixels (X) and the ground truth (Y) results in a Dice coefficient of 1. Our aim is to maximize this metric by improving the overlap between X and Y.
 
