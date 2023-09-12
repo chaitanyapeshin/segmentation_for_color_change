@@ -1,6 +1,6 @@
 # Carvana Image Masking Challenge
 
-<img src="https://storage.googleapis.com/kaggle-organizations/833/thumbnail.png%3Fr=873" alt="drawing" width="200"/>
+<img src="https://www.nerdwallet.com/assets/blog/wp-content/uploads/2021/11/carvana-logo-vector.png" alt="drawing" width="400"/>
 
 Welcome to the Carvana Image Masking Challenge repository. This project focuses on semantic segmentation for cars as part of the Carvana Image Masking Challenge on Kaggle. The goal is to generate precise masks for cars in images.
 
@@ -39,7 +39,7 @@ The Carvana Image Masking Challenge aims to generate highly precise masks for ca
 
 The evaluation metric used for this competition is the Dice coefficient, defined as follows:
 
-![Dice coefficient formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/a80a97215e1afc0b222e604af1b2099dc9363d3b)
+<img src="https://www.researchgate.net/publication/368222578/figure/fig3/AS:11431281164621123@1685838022687/Dice-Sorensen-coefficient-formula.jpg" alt="drawing" width="250"/>
 
 A higher Dice coefficient indicates better segmentation accuracy. A perfect overlap between the predicted set of pixels (X) and the ground truth (Y) results in a Dice coefficient of 1. Our aim is to maximize this metric by improving the overlap between X and Y.
 
