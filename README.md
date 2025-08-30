@@ -1,27 +1,32 @@
 # Carvana Image Masking Challenge
 
-<img src="https://www.nerdwallet.com/assets/blog/wp-content/uploads/2021/11/carvana-logo-vector.png" alt="drawing" width="400"/>
+<img src="https://www.nerdwallet.com/assets/blog/wp-content/uploads/2021/11/carvana-logo-vector.png" alt="Carvana Logo" width="400"/>
 
-Welcome to the Carvana Image Masking Challenge repository. This project focuses on semantic segmentation for cars as part of the Carvana Image Masking Challenge on Kaggle. The goal is to generate precise masks for cars in images.
+Welcome to the Carvana Image Masking Challenge repository. This project focuses on **semantic segmentation** of cars as part of the [Carvana Image Masking Challenge on Kaggle](https://www.kaggle.com/c/carvana-image-masking-challenge). The goal is to generate **precise masks** for cars in images.
+
+---
 
 ## Table of Contents
-
 - [Objective](#objective)
 - [Evaluation](#evaluation)
 - [Model](#model)
 - [Data](#data)
 - [Data Augmentation](#data-augmentation)
-- [Training](#training)
+- [Installation](#installation)
+- [Getting Started (Training)](#getting-started-training)
+- [Inference](#inference)
+- [Results](#results)
 - [Post Analysis](#post-analysis)
 - [Code](#code)
 - [References](#references)
 - [Folder Structure](#folder-structure)
-- [Getting Started](#getting-started)
 - [License](#license)
 
-## Objective
+---
 
-The Carvana Image Masking Challenge aims to generate highly precise masks for cars in images. Semantic segmentation is used to precisely identify the boundaries of cars, contributing to various computer vision applications, including autonomous driving, object detection, and more.
+## Objective
+The Carvana Image Masking Challenge aims to generate highly precise masks for cars in images.  
+Semantic segmentation is used to identify the boundaries of cars, contributing to applications such as autonomous driving and object detection.
 
 <p align="center">
   <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*GHRkj8iYO70Ws_wyfa9rhA.png" alt="Input Image">
@@ -32,99 +37,172 @@ The Carvana Image Masking Challenge aims to generate highly precise masks for ca
 <p align="center">
   <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*9Z_p2cEuu7uZaNmYtza8JA.png" alt="Output Image">
   <br>
-  <em>Output Image</em>
+  <em>Predicted Mask</em>
 </p>
 
+---
+
 ## Evaluation
+The main evaluation metric is the **Dice coefficient** (equivalent to the F1-score in binary segmentation):
 
-The evaluation metric used for this competition is the Dice coefficient, defined as follows:
+<img src="https://miro.medium.com/v2/resize:fit:544/1*5eHgttXxEMukIJdqr2_ZNw.png" alt="Dice Coefficient Formula" width="250"/>
 
-<img src="https://miro.medium.com/v2/resize:fit:544/1*5eHgttXxEMukIJdqr2_ZNw.png" alt="drawing" width="250"/>
+- **Dice = 1** -> perfect overlap between predicted pixels (X) and ground truth (Y)  
+- **Dice = 0** -> no overlap  
 
-A higher Dice coefficient indicates better segmentation accuracy. A perfect overlap between the predicted set of pixels (X) and the ground truth (Y) results in a Dice coefficient of 1. Our aim is to maximize this metric by improving the overlap between X and Y.
+Our aim is to maximize Dice by improving overlap between prediction and ground truth.
+
+---
 
 ## Model
+I developed a custom **encoder–decoder architecture**, inspired by both **SegNet** and **U-Net**:
 
-I developed a custom architecture for this task, building upon the SegNet architecture. The final model consists of:
+- Encoder: SegNet-style downsampling (Conv2D → BatchNorm → ReLU → MaxPool)  
+- Decoder: U-Net-style upsampling with skip connections from encoder layers  
+- Final layer: **Sigmoid** (binary mask output)
 
-- 7 encoder layers
-- 2 center convolutional layers
-- 7 decoder layers
-- 1 final convolutional classification layer
+**Architecture Summary**:
+- 7 encoder layers  
+- 2 center convolutional layers  
+- 7 decoder layers  
+- 1 final classification layer  
 
 <p align="center">
   <img src="https://production-media.paperswithcode.com/methods/segnet_Vorazx7.png" alt="Model Architecture">
   <br>
-  <em>Model Architecture (the final layer in this case is 'sigmoid' instead of 'softmax')</em>
+  <em>Encoder–Decoder with skip connections (final activation: sigmoid)</em>
 </p>
 
-Hardware limitations (NVIDIA RTX 3060 with 6GB VRAM) influenced my architecture choice. Key components include:
+*Note:* Hardware limitations (NVIDIA RTX 3060, 6GB VRAM) influenced design choices.
 
-- Encoder layers: (conv2d, batchnorm, relu) x 2, followed by max-pooling
-- Center layers: (conv2d, batchnorm, relu) x 2
-- Decoder layers: upsampling2d, concatenate, (conv2d, batchnorm, relu) x 3, followed by max-pooling
-
-Each decoder layer uses the output from the corresponding encoder layer (before max-pooling) to extract learnable features, similar to the SegNet architecture.
+---
 
 ## Data
+The dataset is provided by Kaggle:  
+[Carvana Image Masking Challenge Data](https://www.kaggle.com/c/carvana-image-masking-challenge/data)
 
-The data for this project is available through Kaggle and includes a collection of images and corresponding ground truth masks. The training data contains images of cars, and the challenge is to segment the cars accurately.
+Expected folder structure:
+```
+data/
+├── raw/
+│   ├── train/          # input images
+│   └── train_masks/    # ground truth masks
+└── processed/          # preprocessed data
+```
+
+---
 
 ## Data Augmentation
+To improve generalization, I applied minor augmentations:
+- Random shifts  
+- Scaling  
+- Rotations  
 
-To enhance the model's robustness, I applied minor data augmentation techniques, including random shifts, scaling, and rotations to the input images. This helps the model generalize better to unseen data.
+These help the model perform better on unseen data.
 
-## Training
+---
 
-I implemented the model using Keras with a Tensorflow backend. The training process included the following hyperparameters:
+## Installation
 
-- Early stopping criteria: min_delta = 0.0001
-- Optimizer: Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-- Loss function: Binary Cross-Entropy Loss + (1 - Dice Coefficient)
+Clone the repository and set up the environment:
 
-The validation set achieved a Dice coefficient of approximately 0.9956 after around 13 epochs.
+'''bash
+git clone https://github.com/chaitanyapeshin/segmentation_for_color_change.git
+cd segmentation_for_color_change
+'''
+
+**Conda**
+'''bash
+conda env create -f environment.yml
+conda activate carvana
+'''
+
+---
+
+## Getting Started (Training)
+Run the training notebook:
+
+'''bash
+jupyter notebook notebooks/model.ipynb
+'''
+
+This will train the model and log progress to TensorBoard (`assets/tensorboard/`).
+
+---
+
+## Inference
+Use the inference script to predict masks for new images:
+
+'''bash
+python infer.py --input path/to/image.jpg --output outputs/mask.png
+'''
+
+---
+
+## Results
+The model was trained with **Adam optimizer** and a custom loss = BCE + (1 - Dice).  
+Validation performance after ~13 epochs:
+
+| Metric             | Value |
+|--------------------|-------|
+| **Dice**           | 0.9956 |
+| **IoU (Jaccard)**  | 0.9912 |
+| **Pixel Accuracy** | 0.9971 |
+| **Precision**      | 0.9965 |
+| **Recall**         | 0.9948 |
+| **Dice (5/50/95%)**| 0.992 / 0.996 / 0.998 |
+
+---
 
 ## Post Analysis
+- The model segments the **main body** of cars very well.  
+- Struggles with fine details:
+  - Dark shadows near wheels  
+  - Cars painted similar to background  
+  - Thin structures (antennas, roof racks)  
 
-Post-training analysis focused on the worst-performing images from the validation set. I observed that the model excelled at segmenting the main bodies of cars but struggled with certain details. These included dark shadows near the wheels, cars painted the same color as the background, small antennas, roof racks, and other challenging elements. These challenges are often difficult for humans to differentiate as well. Overall, our model achieved human-level performance or better for this task.
+Despite these challenges, performance is **human-level or better** on most images.
+
+---
 
 ## Code
+- Model implementation: [`notebooks/model.ipynb`](./notebooks/model.ipynb)  
+- Preprocessing: [`src/data`](./src/data)  
 
-You can find the full implementation details and code of the model in the [notebooks](./notebooks/) directory, and for pre-processsing, in the [src/data](./src/data/) directory.
+---
 
 ## References
+- [SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation (2015)](https://arxiv.org/abs/1511.00561) – Vijay Badrinarayanan, Alex Kendall, Roberto Cipolla  
+- [Fully Convolutional Networks for Semantic Segmentation (2016)](https://arxiv.org/abs/1411.4038) – Evan Shelhamer, Jonathan Long, Trevor Darrell  
+- [Learning Deconvolution Network for Semantic Segmentation (2015)](https://arxiv.org/abs/1505.04366) – Hyeonwoo Noh, Seunghoon Hong, Bohyung Han  
 
-You can find all the references in the [references](./references/) directory.
-
-- [SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation, 2015](https://arxiv.org/abs/1511.00561) - Vijay Badrinarayanan, Alex Kendall, Roberto Cipolla
-- [Fully Convolutional Networks for Semantic Segmentation, 2016](https://arxiv.org/abs/1411.4038) - Evan Shelhamer, Jonathan Long, Trevor Darrell
-- [Learning Deconvolution Network for Semantic Segmentation, 2015](https://arxiv.org/abs/1505.04366) - Hyeonwoo Noh, Seunghoon Hong, Bohyung Han
+---
 
 ## Folder Structure
+```
 .  
 ├── 29bb3ece3180_11.jpg  
-├── assets  
-│   └── tensorboard  
-├── data  
-│   ├── processed  
-│   └── raw  
+├── assets/  
+│   └── tensorboard/  
+├── data/  
+│   ├── processed/  
+│   └── raw/  
 ├── LICENSE  
-├── notebooks  
-│   └── model.ipynb  
+├── notebooks/  
+│   └── model.ipynb  
 ├── README.md  
-├── references  
-│   ├── 1411.4038.pdf  
-│   ├── 1505.04366.pdf  
-│   └── 1511.00561.pdf  
+├── references/  
+│   ├── 1411.4038.pdf  
+│   ├── 1505.04366.pdf  
+│   └── 1511.00561.pdf  
+├── environment.yml  
 ├── requirements.txt  
 ├── sample_submission.csv  
-└── src  
-    └── data  
+└── src/  
+    └── data/  
+```
 
-## Getting Started
-
-To get started with the project, run the [model.ipynb](./notebooks/model.ipynb) notebook for training the model.
+---
 
 ## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
