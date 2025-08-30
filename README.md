@@ -68,7 +68,7 @@ I developed a custom **encoder–decoder architecture**, inspired by both **SegN
 - 1 final classification layer  
 
 <p align="center">
-  <img src="https://production-media.paperswithcode.com/methods/segnet_Vorazx7.png" alt="Model Architecture">
+  <img src="https://media.geeksforgeeks.org/wp-content/uploads/20240802165919/SegNet-Architecture.webp" alt="Model Architecture">
   <br>
   <em>Encoder–Decoder with skip connections (final activation: sigmoid)</em>
 </p>
